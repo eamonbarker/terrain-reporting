@@ -56,14 +56,9 @@ this.$ = this.jQuery = jQuery.noConflict(true);
     var leads_content = [];
     var recent_updates = [];
     var participateCount = [];
-    var approval_content = "";
-    var report_content = "";
 
     var totalMembers = 0;
     var processedMembers = 0;
-    var processingFinsihed = false;
-    var requiredReady = 0;
-    var gridReady, recentUpdatesReady, approvalsReady, headerReady, leadAssistReady = 0;
 
     const token_url = "https://cognito-idp.ap-southeast-2.amazonaws.com/";
     const origin_url = "https://terrain.scouts.com.au";
