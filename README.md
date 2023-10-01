@@ -14,8 +14,8 @@ To use Grease Monkey scripts you need to first install a browser extension. The 
 - [Chrome](https://www.tampermonkey.net/index.php?browser=chrome&locale=en), install [Tampermonkey from the Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
 - [Safari](https://www.tampermonkey.net/index.php?browser=safari&locale=en), Get from the [Apple Mac store](https://apps.apple.com/us/app/tampermonkey/id1482490089)
 
-Once you have Greasemonkey or the equivelent for your browser installed, click on the script name below to install the script: [Install Terrain Reporting](https://raw.githubusercontent.com/eamonbarker/terrain-reporting/main/terrain-reporting-gm-script.user.js)
+Once you have Greasemonkey or the equivelent for your browser installed, click on the script name below to install the script: [Install Terrain Reporting](https://github.com/eamonbarker/terrain-reporting/raw/main/terrain-reporting-gm-script.user.js)
 
 # Support #
-This is not supported by or endorced by Scouts Australia, if you run into a problem or have a request, [create an issue](https://github.com/activescott/browser-grease/issues) and I'll respond when I have time.
+This is not supported by or endorced by Scouts Australia, if you run into a problem or have a request, [create an issue](https://github.com/eamonbarker/terrain-reporting/issues) and I'll respond when I have time.
 Of course, pull requests are most welcome!

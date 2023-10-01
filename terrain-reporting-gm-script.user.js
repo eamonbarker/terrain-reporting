@@ -5,8 +5,8 @@
 // @description  Reporting for Terrain for leaders to gain better insight in to how the unit is running!
 // @author       Hathi (Eamon Barker)
 // @match        https://terrain.scouts.com.au/*
-// @updateURL    https://raw.githubusercontent.com/eamonbarker/terrain-reporting/main/terrain-reporting-gm-script.user.js
-// @downloadURL  https://raw.githubusercontent.com/eamonbarker/terrain-reporting/main/terrain-reporting-gm-script.user.js
+// @updateURL    https://github.com/eamonbarker/terrain-reporting/raw/main/terrain-reporting-gm-script.user.js
+// @downloadURL  https://github.com/eamonbarker/terrain-reporting/raw/main/terrain-reporting-gm-script.user.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=scouts.com.au
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js
 // @require      https://gist.github.com/raw/2625891/waitForKeyElements.js
