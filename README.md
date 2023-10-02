@@ -7,6 +7,10 @@ Terrain Reporting is for you!
 
 Terrain Reporting is built using [Greasemonkey](https://en.wikipedia.org/wiki/Greasemonkey) scripts, meaning Terrain Reporting is built in to Terrain!
 
+# Usage #
+
+![alt text](https://github.com/eamonbarker/terrain-reporting/blob/main/images/AchievementGrid.jpg?raw=true)
+
 # Install #
 To use Grease Monkey scripts you need to first install a browser extension. The plug-in is browser dependant, it will either be [Tamper Monkey](https://www.tampermonkey.net/index.php?locale=en) or Grease Monkey.
 - [Miocrosoft Edge](https://www.tampermonkey.net/index.php?browser=edge&locale=en), install [TamperMonkey from Edge Store](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd)

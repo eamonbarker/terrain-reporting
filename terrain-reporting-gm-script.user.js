@@ -14,11 +14,26 @@
 // @run-at       document-idle
 // ==/UserScript==
 
-this.$ = this.jQuery = jQuery.noConflict(true);
+GM_addStyle('.reports td {    border: 1px solid #ccc;  }' +
+            ' .reports tr:nth-child(even){background-color: #f2f2f2;}' +
+            ' .reports tr td.core{background-color: #E6F1E8;}' +
+            ' .reports tr:nth-child(even) td.core{background-color: #D1DBD3;}' +
+            ' .reports tr td.water{background-color: #E4F4FC;}' +
+            ' .reports tr:nth-child(even) td.water{background-color: #D9E1E6;}' +
+            ' th.rotate { height: 160px; white-space: nowrap; }' +
+            ' th.rotate > div { transform: translate(25px, 51px) rotate(315deg); width: 60px; margin-left: -30px; }' +
+            ' th.rotate > div > span { border-bottom: 1px solid #ccc; padding: 0px; /*5px 10px;*/ }' +
+            ' .completed { background:' +
+            ' url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAuNSIgZmlsbD0iIzZGQ0Y5NyIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTguNjg3IDcuMjczYTEgMSAwIDAxLjA0IDEuNDE0bC03LjU1NiA4YTEgMSAwIDAxLTEuNDU0IDBMNS4yNzMgMTEuOThhMSAxIDAgMTExLjQ1NC0xLjM3M2wzLjcxNyAzLjkzNiA2LjgyOS03LjIzYTEgMSAwIDAxMS40MTQtLjA0MXoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=)' +
+            ' no-repeat left center; padding: 5px 0 5px 25px; }' +
+            ' .inprogress { background:' +
+            ' url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAuNSIgZmlsbD0iI0EwRDRGRiIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTIgNmExIDEgMCAwMTEgMXY1LjUzMmwzLjY0IDMuMDMzYTEgMSAwIDExLTEuMjggMS41MzdsLTQtMy4zMzRBMSAxIDAgMDExMSAxM1Y3YTEgMSAwIDAxMS0xeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==)' +
+            ' no-repeat left center; padding: 5px 0 5px 25px; }' +
+            ' .ReportCard { box-shadow: 0 4px 8px rgba(229,233,236,.4)!important;  transition: all .2s ease;  padding: 20px;  border-radius: 16px!important }');
 
 (function() {
     'use strict';
-
+    //this.$ = this.jQuery = jQuery.noConflict(true);
     var hathi =
         "     __ \n" +
         " .--()°'.' \n" +
@@ -47,7 +62,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
     waitForKeyElements(".NavMenu__menu-container", addMenuItem);
 
-    console.log("Terrain Reporting Loaded. Version: 0.1");
+    console.log("Terrain Reporting Loaded. Version: 0.2");
 
     var myProfile = null;
     var debug = false;
@@ -82,13 +97,13 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
     function percentBar(percentNum, fractionString) {
         var returnHtml = '<div data-v-3cfe9620="" class="MilestonesCard__progress-container">' +
-            '<div data-v-3cfe9620="" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" class="v-progress-linear MilestonesCard__progress-meter v-progress-linear--query v-progress-linear--rounded v-progress-linear--visible theme--light" style="height: 8px;">' +
-            '<div class="v-progress-linear__background primary" style="opacity: 0.3; left: 50%; width: ' + percentNum + '%;"></div>' +
+            '<div data-v-3cfe9620="" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + percentNum + '" class="v-progress-linear MilestonesCard__progress-meter v-progress-linear--query v-progress-linear--rounded v-progress-linear--visible theme--light" style="height: 8px;">' +
+            '<div class="v-progress-linear__background primary" style="opacity: 0.3; left: ' + percentNum + '%; width: ' + (100-percentNum) + '%;"></div>' +
             '<div class="v-progress-linear__buffer"></div>' +
-            '<div class="v-progress-linear__determinate primary" style="width: 50%;"></div>' +
+            '<div class="v-progress-linear__determinate primary" style="width: ' + percentNum + '%;"></div>' +
             '</div>';
         if(fractionString){
-            returnHtml += '<div data-v-3cfe9620="" class="MilestonesCard__total">12 / 24</div>';
+            returnHtml += '<div data-v-3cfe9620="" class="MilestonesCard__total">' + fractionString + '</div>';
         }
 
         returnHtml += '</div>';
@@ -122,7 +137,12 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         });
         return units;
     }
-
+    function generateInfoBox(infoMessage){
+        var infoBox = '<div data-v-718788cc="" class="OutlinedCard card mr-auto v-card--shaped InfoCard mb-12 v-card v-sheet v-sheet--outlined theme--light InfoCard--info"><div class="row align-content-center">' +
+            '<div class="icon-col col col-auto"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNS4xNzA1IDIxLjk3NTNDMjQuODE2MSAyMi41MDU1IDI0LjczNTkgMjMuMTczIDI0Ljk1NDUgMjMuNzcyMUwyNi4xMDk3IDI2LjkzNzlDMjIuNzE1MyAyNi45NzA5IDE5LjM0OTMgMjcgMTUuOTU4MyAyN0M5LjkwODIzIDI3IDUgMjEuOTk4MyA1IDE1LjkzNDNDNSA5LjkwNDk5IDkuOTE1MyA1IDE2IDVDMjIuMDg0NyA1IDI3IDkuOTA0OTkgMjcgMTUuOTM0M0MyNyAxOC4xNzA0IDI2LjMyNjggMjAuMjQ0OCAyNS4xNzA1IDIxLjk3NTNaTTI2LjgzNyAyOC45MzA5QzIzLjIwMjIgMjguOTY2NiAxOS41OTQ3IDI5IDE1Ljk1ODMgMjlDOC43Nzg2NCAyOSAzIDIzLjA3NzcgMyAxNS45MzQzQzMgOC43OTA4OCA4LjgyMDMgMyAxNiAzQzIzLjE3OTcgMyAyOSA4Ljc5MDg3IDI5IDE1LjkzNDNDMjkgMTguNTc4OCAyOC4yMDIzIDIxLjAzNzkgMjYuODMzMyAyMy4wODY1TDI4Ljk1ODMgMjguOTFDMjguNDkxIDI4LjkxNDYgMjguMDI0MyAyOC45MTkyIDI3LjU1ODEgMjguOTIzOEMyNy4zMTc2IDI4LjkyNjEgMjcuMDc3MiAyOC45Mjg1IDI2LjgzNyAyOC45MzA5WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNiAyNEMxNS40NDc3IDI0IDE1IDIzLjU1MjMgMTUgMjNMMTUgMTQuNjY2N0MxNSAxNC4xMTQ0IDE1LjQ0NzcgMTMuNjY2NyAxNiAxMy42NjY3QzE2LjU1MjMgMTMuNjY2NyAxNyAxNC4xMTQ0IDE3IDE0LjY2NjdMMTcgMjNDMTcgMjMuNTUyMyAxNi41NTIzIDI0IDE2IDI0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNiAxMEMxNS40NDc3IDEwIDE1IDEwLjQ0NzcgMTUgMTFDMTUgMTEuNTUyMyAxNS40NDc3IDEyIDE2IDEyQzE2LjU1MjMgMTIgMTcgMTEuNTUyMyAxNyAxMUMxNyAxMC40NDc3IDE2LjU1MjMgMTAgMTYgMTBaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="info" class="info-icon"></div>' +
+            ' <div class="text-col col"><div tabindex="-1" class="v-list-item theme--light"><div class="v-list-item__content"><div class="v-list-item__title card-title"><span>' + infoMessage + '</span></div></div></div></div></div></div>';
+        return infoBox;
+    }
     async function generateUnitContainer(profile){
         var unitName = profile.unit.name;
         var section = profile.unit.section;
@@ -132,7 +152,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
         renderingContainers.push({
             type: "heading",
-            key: 0,
+            key: 1,
             location: "header",
             html: headerHtml,
             section: section,
@@ -143,16 +163,52 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
         var url = "https://metrics.terrain.scouts.com.au/units/" + unitId + "/members?limit=999";
         lastuser = localStorage.getItem('CognitoIdentityServiceProvider.6v98tbc09aqfvh52fml3usas3c.LastAuthUser');
+        try {
+            const response = await fetch(url, {
+                method: 'GET', mode: 'cors', cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem("CognitoIdentityServiceProvider.6v98tbc09aqfvh52fml3usas3c."+lastuser+".idToken")
+                },
+                redirect: 'error', referrerPolicy: 'strict-origin-when-cross-origin',
+            }).catch(err => {
+                console.log("Error getting members from API. " + err);
+                getMembersMetricsCache(unitId).then(data => {
+                    unitHtml = renderUnitTable(data, unitName + " (Cached)", section);
+                    renderingContainers.push({
+                        type: "UnitGrid",
+                        key: 5,
+                        location: "full",
+                        html: unitHtml,
+                        section: section,
+                        render: true});
+                })
+            });
 
-        const response = await fetch(url, {
-            method: 'GET', mode: 'cors', cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem("CognitoIdentityServiceProvider.6v98tbc09aqfvh52fml3usas3c."+lastuser+".idToken")
-            },
-            redirect: 'error', referrerPolicy: 'strict-origin-when-cross-origin',
-        }).catch(err => {
-            console.log("Error getting members from API. " + err);
+            response.json().then(data => {
+                unitHtml = renderUnitTable(data, unitName, section);
+                renderingContainers.push({
+                    type: "UnitGrid",
+                    key: 5,
+                    location: "full",
+                    html: unitHtml,
+                    section: section,
+                    render: true});
+            }).catch(err => {
+                console.log("Error getting members from API. " + err);
+                getMembersMetricsCache(unitId).then(data => {
+                    unitHtml = renderUnitTable(data, unitName + " (Cached)", section);
+                    renderingContainers.push({
+                        type: "UnitGrid",
+                        key: 5,
+                        location: "full",
+                        html: unitHtml,
+                        section: section,
+                        render: true});
+                });
+            });
+        } catch (error) {
+            console.log("Error getting members from API. " + error);
             getMembersMetricsCache(unitId).then(data => {
                 unitHtml = renderUnitTable(data, unitName + " (Cached)", section);
                 renderingContainers.push({
@@ -162,33 +218,19 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                     html: unitHtml,
                     section: section,
                     render: true});
-            })
-        });
-        response.json().then(data => {
-            unitHtml = renderUnitTable(data, unitName, section);
-            renderingContainers.push({
-                type: "UnitGrid",
-                key: 5,
-                location: "full",
-                html: unitHtml,
-                section: section,
-                render: true});
-        }).catch(err => {
-            console.log("Error getting members from API. " + err);
-            getMembersMetricsCache(unitId).then(data => {
-                unitHtml = renderUnitTable(data, unitName + " (Cached)", section);
+
                 renderingContainers.push({
-                    type: "UnitGrid",
-                    key: 5,
-                    location: "full",
-                    html: unitHtml,
+                    type: "infoBox",
+                    key: 0,
+                    location: "alert",
+                    html: generateInfoBox("Unit grid has been loaded from cahced data due to errors calling Terrain APIs. Refresh the page and try again, several of the report items will not function as a result."),
                     section: section,
                     render: true});
             });
-        });
+        }
     }
 
-    function old_renderContainers(){
+    function _renderContainers(){
         var renderTracker = 0;
         var containersToRender = myProfile.profiles.length * 6;
         if(renderingContainers.length < containersToRender)
@@ -221,28 +263,28 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         }
     }
 
+    var renderTracker = 0;
+
     function renderContainers(){
         var container = document.getElementsByClassName("v-main__wrap")[0];
         container = container.getElementsByClassName("container")[0].children[0];
         container.className=""; //Remove the class from the container. The class on basecamp causes layout issues.
-        var currentHtml = container.innerHTML;
-        container.innerHTML = "";
 
-        var renderTracker = 0;
         var containersToRender = myProfile.profiles.length * 6;
 
-        if(renderingContainers.length < containersToRender)
+        if((renderingContainers.length < containersToRender) || !processingFinsihed)
         {
-            if(renderTracker !== renderingContainers.length)
+            if(renderTracker != renderingContainers.length)
             {
-                renderTracker = renderingContainers.length;
-                console.log("Render Container Count: " + renderingContainers.length + ", waiting for " + containersToRender);
-                console.log(container);
                 container.innerHTML = "";
-                container.innerHTML = '<h3>Loading Content</h3>' +
-                    percentBar(Math.round((renderingContainers.length/containersToRender)*100), renderingContainers.length + "/" + containersToRender);
+                renderTracker = renderingContainers.length;
+                var percComp = Math.round((renderingContainers.length/containersToRender)*100);
+                console.log("Render Container Count: " + renderTracker + ", waiting for " + containersToRender);
+                console.log(renderingContainers);
+                container.innerHTML = '<div class="ReportCard card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light" style="width: 50%">'+
+                    '<h3>Loading Content</h3>' + percentBar(percComp, renderingContainers.length + "/" + containersToRender) + '</div>' +
+                    '<div class="Hathi">' + hathi.replaceAll('\n', '<br />') + '</div>';
             }
-
             window.setTimeout(renderContainers, 500); /* this checks the flag every 500 milliseconds*/
         }else
         {
@@ -268,13 +310,21 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                 var sectionContent = Object.groupBy(results, result => {return result.section});
                 console.log(sectionContent);
                 for(var sec in sectionContent) {
+                    var renderingContent = "";
                     console.log("Rendering content for: " + sec);
                     var content = [];
                     for(var cont in sectionContent[sec]){
                         content.push(sectionContent[sec][cont]);
                     }
+
+                    var alertContents = content.filter(function(el) {return el.location == "alert"});
+                    for(var alertContent in alertContents)
+                    {
+                        renderingContent += alertContents[alertContent].html;
+                    }
+
                     var headerContents = content.filter(function(el) {return el.location == "header"});
-                    container.innerHTML += headerContents[0].html; //Assume only one Header
+                    renderingContent += headerContents[0].html; //Assume only one Header
 
                     var columnContents = content.filter(function(el) {return el.location == "column"});
 
@@ -308,7 +358,8 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                     }
 
                     var weightArray = [];
-                    var sizedArray = []
+                    var sizedArray = [];
+
                     for(var columnContent in columnContents)
                     {
                         weightArray.push(columnContents[columnContent].html.length);
@@ -316,6 +367,8 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                     }
 
                     var splitted = splitArrayEqually(weightArray.sort(function(a, b) { return a - b; }), 2);
+
+                    console.log(splitted);
 
                     for(var i0 = 0; i0 < splitted[0].length; i0++) {
                         var item0 = splitted[0][i0];
@@ -327,20 +380,30 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                         col2 += sizedArray.find(({size}) => size === item1).html;
                     }
 
+                    if(splitted.length > 2)
+                    {
+                        if(col1.length > col2.length){
+                            col2 += sizedArray.find(({size}) => size === splitted[2][0]).html;
+                        }else{
+                            col1 += sizedArray.find(({size}) => size === splitted[2][0]).html;
+                        }
+                    }
+
                     col1 += "</div>";
                     col2 += "</div>";
                     rowContent += col1;
                     rowContent += col2;
                     rowContent += "</div>";
-                    container.innerHTML += rowContent;
+                    renderingContent += rowContent;
 
                     var fullContents = content.filter(function(el) {return el.location == "full"});
                     for(var fullContent in fullContents)
                     {
-                        container.innerHTML += fullContents[fullContent].html;
+                        renderingContent += fullContents[fullContent].html;
                     }
+                    console.log(renderingContent);
+                    container.innerHTML += renderingContent + "<hr />";
                 }
-                container.innerHTML += "<hr />";
             }
         }
     }
@@ -400,37 +463,38 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                           "3": {"p": 4, "a": 4, "l": 4, "tp": 16}
                          };
 
-    var achievements = {
-        'milestone' : 'Milestone',
-        'outdoor_adventure_skill' : 'OAS',
-        'special_interest_area' : 'SIA',
-        "intro_scouting": "⚜️ Introduction to Scouting",
-        "intro_section": "🗣️ Introduction to Section",
-        "course_reflection": "📚 Personal Development Course",
-        "adventurous_journey": "🚀 Adventurous Journey",
-        "personal_reflection": "📐 Personal Reflection",
-        "peak_award": "⭐ Peak Award",
-        "sia_adventure_sport": "🏈 Adventure & Sport",
-        "sia_art_literature": "🎭 Arts & Literature",
-        "sia_better_world": "🌏 Creating a Better World",
-        "sia_environment": "♻️ Environment",
-        "sia_growth_development": "🌱 Growth & Development",
-        "sia_stem_innovation": "🔎 STEM & Innovation",
-        'bushcraft' : '🏞️ Bushcraft',
-        'camping' : '⛺ Camping',
-        'bushwalking' : '🥾 Bushwalking',
-        'aquatics' : '🏊 Aquatics',
-        'vertical' : '🧗 Vertical',
-        'alpine' : '❄️ Alpine',
-        'paddling' : '🛶 Paddling',
-        'boating' : '⛵ Boating',
-        'cycling' : '🚲 Cycling',
-        '1' : '1',
-        '2' : '2',
-        '3' : '3'
-    }
 
     function lookupAcheivements(achevement){
+
+        var achievements = {
+            'milestone' : 'Milestone',
+            'outdoor_adventure_skill' : 'OAS',
+            'special_interest_area' : 'SIA',
+            "intro_scouting": "⚜️ Introduction to Scouting",
+            "intro_section": "🗣️ Introduction to Section",
+            "course_reflection": "📚 Personal Development Course",
+            "adventurous_journey": "🚀 Adventurous Journey",
+            "personal_reflection": "📐 Personal Reflection",
+            "peak_award": "⭐ Peak Award",
+            "sia_adventure_sport": "🏈 Adventure & Sport",
+            "sia_art_literature": "🎭 Arts & Literature",
+            "sia_better_world": "🌏 Creating a Better World",
+            "sia_environment": "♻️ Environment",
+            "sia_growth_development": "🌱 Growth & Development",
+            "sia_stem_innovation": "🔎 STEM & Innovation",
+            'bushcraft' : '🏞️ Bushcraft',
+            'camping' : '⛺ Camping',
+            'bushwalking' : '🥾 Bushwalking',
+            'aquatics' : '🏊 Aquatics',
+            'vertical' : '🧗 Vertical',
+            'alpine' : '❄️ Alpine',
+            'paddling' : '🛶 Paddling',
+            'boating' : '⛵ Boating',
+            'cycling' : '🚲 Cycling',
+            '1' : '1',
+            '2' : '2',
+            '3' : '3'
+        };
         return achievements[achevement];
     }
 
@@ -501,7 +565,10 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
                     if (y.status=='awarded' && updatedDate > reportDate) {
                         member_content += current_member + ' achieved ';
-
+                        if (y.type=='intro_section') {
+                            type = lookupAcheivements(y.type) + ' for the ' + section + ' section';
+                            member_content += type;
+                        }
                         if (y.type=='milestone') {
                             type = lookupAcheivements(y.type) + ' ' + lookupAcheivements(y.achievement_meta.stage);
                             member_content += type;
@@ -570,6 +637,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                     renderUpdateContent(sec);
                     renderLeadAssist(sec);
                     renderArcNeeded(sec)
+                    processingFinsihed = true;
                 };
             }
         });
@@ -588,7 +656,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                     completion(milestone.participates.find(item => item.challenge_area == "personal_growth").total, milestoneTable[milestoneNumber].p) +
                     completion(milestone.total_assists,milestoneTable[milestoneNumber].a) +
                     completion(milestone.total_leads,milestoneTable[milestoneNumber].l) +
-                    '<td>&nbsp</td>';
+                    '<td>&nbsp;</td>';
                 milestoneHtml += milestoneCellOutput;
             }
         });
@@ -599,6 +667,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
     }
 
     function renderUpdateContent(section){
+        var recentUpdatedReport = "";
         if (recent_updates){
             var sectionUpdates = recent_updates.filter(function(el) {return el.section == section});
 
@@ -606,21 +675,24 @@ this.$ = this.jQuery = jQuery.noConflict(true);
             {
                 var reportDate = new Date();
                 reportDate.setDate(reportDate.getDate() - 14);
-                var recentUpdatedReport = '<p><b>Recent Updates</b> (from ' + reportDate.toLocaleDateString('en-GB') +')</p>';
-
+                recentUpdatedReport = '<p><b>Recent updates</b> (from ' + reportDate.toLocaleDateString('en-GB') +' to today)</p>';
                 for(var l = 0; l < sectionUpdates.length; l++){
                     recentUpdatedReport += sectionUpdates[l].content + '<br />';
                 }
-
-                renderingContainers.push({
-                    type: "memberUpdates",
-                    key: 4,
-                    location: "column",
-                    html: '<div class="Card card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + recentUpdatedReport +'</div>',
-                    section: section,
-                    render: true});
+            }else{
+                recentUpdatedReport = '<p><b>Recent updates</b></p><i>No recent updates for the ' + section + ' section</i>';
             }
+        }else{
+            recentUpdatedReport = '<p><b>Recent Updates</b></p><i>No recent updates for the ' + section + ' section</i>';
         }
+
+        renderingContainers.push({
+            type: "memberUpdates",
+            key: 4,
+            location: "column",
+            html: '<div class="ReportCard card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + recentUpdatedReport +'</div>',
+            section: section,
+            render: true});
     }
 
     function renderArcNeeded(section){
@@ -651,13 +723,13 @@ this.$ = this.jQuery = jQuery.noConflict(true);
             }
         }
 
-        arcNeededReport = "<b>ARC Credits needed</b> Credits per Challenge Area for member to reach next milestone</br>";
+        arcNeededReport = "<b>Challenge Area credits needed</b> <br /> Credits per Challenge Area to reach next milestone<br />";
         arcNeededReport += "<b>Community:</b> " + communityNum + " of " + totalRecNum + "("
-            + Math.round((communityNum/totalRecNum)*100) + "%) required </br>";
+            + Math.round((communityNum/totalRecNum)*100) + "%) required <br />";
         arcNeededReport += "<b>Outdoors:</b> " + outdoorsNum + " of " + totalRecNum + "("
-            + Math.round((outdoorsNum/totalRecNum)*100) + "%) required</br>";
+            + Math.round((outdoorsNum/totalRecNum)*100) + "%) required<br />";
         arcNeededReport += "<b>Creative:</b> " + creativeNum + " of " + totalRecNum + "("
-            + Math.round((creativeNum/totalRecNum)*100) + "%) required</br>";
+            + Math.round((creativeNum/totalRecNum)*100) + "%) required<br />";
         arcNeededReport += "<b>Personal Growth:</b> " + personalGrowthNum + " of " + totalRecNum + "("
             + Math.round((personalGrowthNum/totalRecNum)*100) + "%) required";
 
@@ -665,13 +737,13 @@ this.$ = this.jQuery = jQuery.noConflict(true);
             type: "ArcNeeded",
             key: 4,
             location: "column",
-            html: '<div class="Card card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + arcNeededReport + '</div>',
+            html: '<div class="ReportCard card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + arcNeededReport + '</div>',
             section: section,
             render: true});
     }
 
     function renderLeadAssist(section){
-        var leadAssistReport = "<p><b>Members needing leadership credits</b> (participation target has been met)</p>";
+        var leadAssistReport = "<p><b>Members needing leadership credits</b> <br />Participation target has been met </p>";
 
         if (assists_content || leads_content){
             //Filter for the section
@@ -682,26 +754,27 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                 var actionRequiredContent = "";
 
                 if (assists.length > 0){
-                    leadAssistReport += '<i>Assists</i><br>';
+                    leadAssistReport += '<i>Assists</i><br />';
                     for(var a = 0; a < assists.length; a++){
                         leadAssistReport += assists[a].content;
                     }
+                    leadAssistReport += '<br />';
                 }
                 if (leads.length > 0){
-                    leadAssistReport += '<i>Leads</i><br>';
+                    leadAssistReport += '<i>Leads</i><br />';
                     for(var l = 0; l < leads.length; l++){
                         leadAssistReport += leads[l].content;
                     }
                 }
             }else{
-                leadAssistReport += "<i>No lead/assists required at this stage!</i>";
+                leadAssistReport += "<i>No lead/assists required for the " + section + " section</i>";
             }
 
             renderingContainers.push({
                 type: "LeadAssist",
                 key: 2,
                 location: "column",
-                html: '<div class="Card card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + leadAssistReport + '</div>',
+                html: '<div class="ReportCard card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + leadAssistReport + '</div>',
                 section: section,
                 render: true});
         }
@@ -711,25 +784,23 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         var url = agenda_url + "/" + unitId + "/member-agenda";
         await getTerrainData(url).then(data => {
             var approvalContent = "";
-            for(var a = 0; a < data.items.length; a++){
-                var approval = data.items[a];
-                approvalContent += approval.title + " <br />";
-            }
+            console.log(data);
             if(data.items.length>0){
-                approvalContent = "<div><p><b>Pending approvals</b></p>" + approvalContent + "</div>";
-                renderingContainers.push({
-                    type:"approvalRequired",
-                    key: 1,
-                    location: "column",
-                    html: '<div class="Card card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + approvalContent + '</div>',
-                    section: section,
-                    render: true});
+                for(var a = 0; a < data.items.length; a++){
+                    var approval = data.items[a];
+                    approvalContent += approval.title + " <br />";
+                }
             }else{
-                renderingContainers.push({
-                    type:"approvalRequired",
-                    section: section,
-                    render: false});
+                approvalContent = "<i>No approvals required for the " + section + " section.</i>";
             }
+            approvalContent = "<p><b>Pending approvals</b></p>" + approvalContent + "";
+            renderingContainers.push({
+                type:"approvalRequired",
+                key: 1,
+                location: "column",
+                html: '<div class="ReportCard card mr-auto v-card--shaped card MilestonesParticipates mb-4 v-card v-sheet theme--light">' + approvalContent + '</div>',
+                section: section,
+                render: true});
         });
     }
 
@@ -816,27 +887,27 @@ this.$ = this.jQuery = jQuery.noConflict(true);
             '<tr style="background-color:#ffffff;"><th scope="col" class="UnitsMetricsTable__header text-start" style="vertical-align:bottom; width: 180px; min-width: 180px;"><div class="d-flex align-center"><span style="white-space: initial;">Unit member</span></div></th>'+
             '<th class="rotate"><div><span>Age</span></div></th><th class="rotate"><div><span>Scouts</span></div></th><th class="rotate"><div><span>Section</span></div></th>'+
             '<th class="rotate"><div><span>Milestone 1</span></div></th><th class="rotate"><div><span>Milestone 2</span></div></th><th class="rotate"><div><span>Milestone 3</span></div></th>'+
-            '<th class="rotate"><div><span>Current</div></span></th>' +
-            '<th class="rotate">&nbsp</th>'+
+            '<th class="rotate"><div><span>Current</span></div></th>' +
+            '<th class="rotate">&nbsp;</th>'+
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/community--default.--cc91206.svg" alt="Community Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>'+
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/outdoors--default.--d113c08.svg" alt="Outdoor Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/creative--default.--fe2ed67.svg" alt="Creative Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/personal-growth--default.--98a0e95.svg" alt="Personal Growth Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
-            '<th class="rotate"><div><span>Assist</span></div></th><th class="rotate"><div><span>Lead</span></div></th><th class="rotate">&nbsp</th>'+
+            '<th class="rotate"><div><span>Assist</span></div></th><th class="rotate"><div><span>Lead</span></div></th><th class="rotate">&nbsp;</th>'+
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/community--default.--cc91206.svg" alt="Community Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>'+
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/outdoors--default.--d113c08.svg" alt="Outdoor Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/creative--default.--fe2ed67.svg" alt="Creative Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/personal-growth--default.--98a0e95.svg" alt="Personal Growth Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
-            '<th class="rotate"><div><span>Assist</span></div></th><th class="rotate"><div><span>Lead</span></div></th><th class="rotate">&nbsp</th>'+
+            '<th class="rotate"><div><span>Assist</span></div></th><th class="rotate"><div><span>Lead</span></div></th><th class="rotate">&nbsp;</th>'+
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/community--default.--cc91206.svg" alt="Community Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>'+
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/outdoors--default.--d113c08.svg" alt="Outdoor Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/creative--default.--fe2ed67.svg" alt="Creative Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
             '<th valign="bottom"><div><span><img data-v-3cfe9620="" src="/_nuxt/img/personal-growth--default.--98a0e95.svg" alt="Personal Growth Challenge" class="MilestonesParticipates__pal-icon align-center"></span></div></th>' +
-            '<th class="rotate"><div><span>Assist</span></div></th><th class="rotate"><div><span>Lead</span></div></th><th class="rotate">&nbsp</th>'+
+            '<th class="rotate"><div><span>Assist</span></div></th><th class="rotate"><div><span>Lead</span></div></th><th class="rotate">&nbsp;</th>'+
             '<th class="rotate">&nbsp;</th>' +
             '<th class="rotate"><div><span>Camping</span></div></th><th class="rotate"><div><span>Bushcraft</span></div></th><th class="rotate"><div><span>Bushwalking</span></div></th>' +
             '<th class="rotate"><div><span>Alpine</span></div></th><th class="rotate"><div><span>Cycling</span></div></th><th class="rotate"><div><span>Vertical</span></div></th>' +
-            '<th class="rotate"><div><span>Aquatics</span></div></th><th class="rotate"><div><span>Boating</span></div></th><th class="rotate"><div><span>Paddling</span></div></th></tr></tr>' +
+            '<th class="rotate"><div><span>Aquatics</span></div></th><th class="rotate"><div><span>Boating</span></div></th><th class="rotate"><div><span>Paddling</span></div></th></tr>' +
             '</thead>';
         var csvout = "";
         if (csv) {
@@ -875,7 +946,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
                 '<td>'+me.milestone.milestone+'</td>' +
                 '<td class="divider">&nbsp;</td>' +
                 milestoneCells(me.milestones) +
-                '<td class="divider">&nbsp</td>' +
+                '<td class="divider">&nbsp;</td>' +
                 oas(me.oas) +
                 '</tr>';
 
@@ -904,5 +975,3 @@ this.$ = this.jQuery = jQuery.noConflict(true);
     }
 }
 )();
-
-
