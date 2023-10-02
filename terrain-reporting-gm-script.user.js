@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Terrain Reporting
 // @namespace    https://terrain.scouts.com.au/
-// @version      0.1
+// @version      0.2
 // @description  Reporting for Terrain for leaders to gain better insight in to how the unit is running!
 // @author       Hathi (Eamon Barker)
 // @match        https://terrain.scouts.com.au/*
@@ -58,9 +58,14 @@ this.$ = this.jQuery = jQuery.noConflict(true);
     var leads_content = [];
     var recent_updates = [];
     var participateCount = [];
+    var approval_content = "";
+    var report_content = "";
 
     var totalMembers = 0;
     var processedMembers = 0;
+    var processingFinsihed = false;
+    var requiredReady = 0;
+    var gridReady, recentUpdatesReady, approvalsReady, headerReady, leadAssistReady = 0;
 
     const token_url = "https://cognito-idp.ap-southeast-2.amazonaws.com/";
     const origin_url = "https://terrain.scouts.com.au";
