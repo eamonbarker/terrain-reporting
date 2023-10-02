@@ -7,6 +7,15 @@ Terrain Reporting is for you!
 
 Terrain Reporting is built using [Greasemonkey](https://en.wikipedia.org/wiki/Greasemonkey) scripts, meaning Terrain Reporting is built in to Terrain!
 
+# Install #
+To use Grease Monkey scripts you need to first install a browser extension. The plug-in is browser dependant, it will either be [Tamper Monkey](https://www.tampermonkey.net/index.php?locale=en) or Grease Monkey.
+- [Miocrosoft Edge](https://www.tampermonkey.net/index.php?browser=edge&locale=en), install [TamperMonkey from Edge Store](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd)
+- [Firefox](https://www.tampermonkey.net/index.php?browser=firefox&locale=en), install [Greasemonkey](https://addons.mozilla.org/firefox/addon/greasemonkey/)
+- [Chrome](https://www.tampermonkey.net/index.php?browser=chrome&locale=en), install [Tampermonkey from the Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
+- [Safari](https://www.tampermonkey.net/index.php?browser=safari&locale=en), Get from the [Apple Mac store](https://apps.apple.com/us/app/tampermonkey/id1482490089)
+
+Once you have Greasemonkey or the equivalent for your browser installed, click on the script name below to install the script: [Install Terrain Reporting](https://github.com/eamonbarker/terrain-reporting/raw/main/terrain-reporting-gm-script.user.js)
+
 # Usage #
 
 ## Report Cards ##
@@ -32,16 +41,6 @@ The Achievements Grid gives you a rolled-up summary for each youth member. It sh
 
 *Terrain Reporting - Achievement Grid*
 ![Terrain Reporting - Achievements Grid](https://github.com/eamonbarker/terrain-reporting/blob/main/images/AchievementGrid.jpg?raw=true)
-
-
-# Install #
-To use Grease Monkey scripts you need to first install a browser extension. The plug-in is browser dependant, it will either be [Tamper Monkey](https://www.tampermonkey.net/index.php?locale=en) or Grease Monkey.
-- [Miocrosoft Edge](https://www.tampermonkey.net/index.php?browser=edge&locale=en), install [TamperMonkey from Edge Store](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd)
-- [Firefox](https://www.tampermonkey.net/index.php?browser=firefox&locale=en), install [Greasemonkey](https://addons.mozilla.org/firefox/addon/greasemonkey/)
-- [Chrome](https://www.tampermonkey.net/index.php?browser=chrome&locale=en), install [Tampermonkey from the Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
-- [Safari](https://www.tampermonkey.net/index.php?browser=safari&locale=en), Get from the [Apple Mac store](https://apps.apple.com/us/app/tampermonkey/id1482490089)
-
-Once you have Greasemonkey or the equivalent for your browser installed, click on the script name below to install the script: [Install Terrain Reporting](https://github.com/eamonbarker/terrain-reporting/raw/main/terrain-reporting-gm-script.user.js)
 
 # Support #
 This is not supported by or endorsed by Scouts Australia, if you run into a problem or have a request, [create an issue](https://github.com/eamonbarker/terrain-reporting/issues) and I'll respond when I have time.
