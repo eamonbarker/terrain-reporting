@@ -25,7 +25,7 @@ It is common for youth to have completed the participate aspects of their Milest
 This is a combination of milestones met and waiting on reflection and SIA/OAS completed by the youth members. This is a useful card to remind you to hand out badges and to speak to youth/parents to complete their reflections.
 
 *Terrain Reporting - Report Cards*
-![Terrain Reporting - Report Cards](https://github.com/eamonbarker/terrain-reporting/blob/main/images/ReportComponents.jpg?raw=true)
+![Terrain Reporting - Report Cards](https://github.com/eamonbarker/terrain-reporting/blob/main/images/ReportComponents.png?raw=true)
 
 ## Achievement Grid ##
 The Achievements Grid gives you a rolled-up summary for each youth member. It shows their individual progression related to milestones and OAS. The gird gives you a good view of where you can focus additional programming tasks to bring the unit up to meet a specific goal. An example: *You may have a cohort of 9 year olds in the Cubs unit that need Stage 3 in the Core OAS to get their Grey Wolf, this will show who must attend a OAS specific event to move them up the stages.*
